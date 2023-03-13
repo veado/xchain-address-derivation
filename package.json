@@ -1,0 +1,43 @@
+{
+  "name": "xchain-address-derivation",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "autoprefixer": "10.4.5",
+    "postcss": "^8.4.21",
+    "rollup-plugin-node-polyfills": "^0.2.1",
+    "rollup-plugin-polyfill-node": "^0.12.0",
+    "tailwindcss": "^3.2.4",
+    "typescript": "^4.9.5",
+    "vite": "^4.1.4",
+    "vite-plugin-solid": "^2.6.1",
+    "zod": "^3.21.4"
+  },
+  "dependencies": {
+    "@cosmos-client/core": "^0.46.1",
+    "@xchainjs/xchain-client": "^0.13.5",
+    "@xchainjs/xchain-cosmos": "^0.20.8",
+    "@xchainjs/xchain-crypto": "^0.2.7",
+    "@xchainjs/xchain-mayachain": "^0.1.1",
+    "@xchainjs/xchain-thorchain": "^0.27.9",
+    "@xchainjs/xchain-util": "^0.12.0",
+    "axios": "^0.25.0",
+    "bip39": "^3.1.0",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
+    "process": "^0.11.10",
+    "sailui": "^0.7.0",
+    "solid-form-handler": "^1.0.0-alpha.7",
+    "solid-js": "^1.6.14",
+    "yup": "^1.0.2"
+  },
+  "overrides": {
+    "autoprefixer": "10.4.5"
+  }
+}
