@@ -1,6 +1,3 @@
-import { Network as ClientNetwork } from "@xchainjs/xchain-client";
-import { Network } from "./types";
-
 import { validatePhrase } from "@xchainjs/xchain-crypto";
 import * as yup from "yup";
 
@@ -8,6 +5,8 @@ type PhraseSchema = {
   phrase: string;
   index: number;
 };
+
+const derivationPathItem = yup.number().required().integer().min(0);
 
 export const phraseFormSchema = (defaults: {
   index: number;
@@ -33,14 +32,22 @@ export const phraseFormSchema = (defaults: {
           return true;
         },
       }),
-    index: yup.number().required().integer().min(0).default(defaults.index),
+    index: derivationPathItem.default(defaults.index),
   });
 
-export const toClientNetwork = (network: Network): ClientNetwork => {
-  switch (network) {
-    case "mainnet":
-      return ClientNetwork.Mainnet;
-    case "stagenet":
-      return ClientNetwork.Stagenet;
-  }
+type EditableDerivationPathSchema = {
+  account: number;
+  change: number;
+  index: number;
 };
+
+export const editableDerivationPathSchema = (defaults: {
+  account: number;
+  change: number;
+  index: number;
+}): yup.ObjectSchema<EditableDerivationPathSchema> =>
+  yup.object({
+    account: derivationPathItem.default(defaults.account),
+    change: derivationPathItem.default(defaults.change),
+    index: derivationPathItem.default(defaults.index),
+  });

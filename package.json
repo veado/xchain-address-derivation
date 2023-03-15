@@ -37,6 +37,9 @@
     "solid-js": "^1.6.14",
     "yup": "^1.0.2"
   },
+  "overrides-comments": {
+    "autoprefixer-comment": "Stick with autoprefixer@10.4.5 to avoid 'Replace color-adjust to print-color-adjust.'  warning - seehttps://github.com/tailwindlabs/tailwindcss-forms/pull/115"
+  },
   "overrides": {
     "autoprefixer": "10.4.5"
   }
