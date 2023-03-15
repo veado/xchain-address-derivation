@@ -9,11 +9,11 @@ export default defineConfig({
   build: {
     target: "esnext",
     commonjsOptions: {
-      transformMixedEsModules: true
-    }
+      transformMixedEsModules: true,
+    },
   },
   define: {
-    'typeof window': true
+    "typeof window": true,
   },
   resolve: {
     alias: {
@@ -26,6 +26,7 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
+    // *zod' is required by `solid-form-handler`, but we are using  `yup` instead
     exclude: ["zod"],
   },
 });

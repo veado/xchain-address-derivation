@@ -1,26 +1,34 @@
-import { Component, Match, Switch, JSX, splitProps } from "solid-js";
+import { Component, Match, Switch, JSX } from "solid-js";
+import { deriveAddressByChain } from "../store";
 import * as T from "../types";
+import { EditableDerivationPath } from "./EditableDerivationPath";
 
 export type Props = {
   address: T.Address;
+  path: T.DerivationPath;
 } & JSX.HTMLAttributes<HTMLElement>;
 
 export const Address: Component<Props> = (props) => {
   const { chain } = props.address;
-  const r = props.address.resource;
+  const resource = props.address.resource;
+
+  const updatePath = (path: T.DerivationPath) => {
+    deriveAddressByChain({ chain, path });
+  };
 
   return (
     <div class={`w-full flex flex-col ${props.class || ""}`}>
-      <h2 class="text-xl">{chain}</h2>
+      <h2 class="text-2xl m-0">{chain}</h2>
+      <EditableDerivationPath path={props.path} onChangePath={updatePath} />
       <Switch>
-        <Match when={r.loading}>
+        <Match when={resource.loading}>
           <p>Deriving address...</p>
         </Match>
-        <Match when={r.error}>
-          <p>Address error ${r.error()}</p>
+        <Match when={resource.error}>
+          <p>Address error ${resource.error()}</p>
         </Match>
-        <Match when={r()}>
-          <p>{r()}</p>
+        <Match when={resource()}>
+          <p class="text-xl">{resource()}</p>
         </Match>
       </Switch>
     </div>

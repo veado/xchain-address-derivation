@@ -13,9 +13,18 @@ export type Address = {
 };
 export type Addresses = Address[];
 
+export type DerivationPath = [number, number, number, number, number];
+
+export type DerivationPaths = Record<Chain, DerivationPath>;
+
 export type GetAddressParams = {
   network: Network;
   phrase: string;
-  index: number;
+  path: DerivationPath;
+  chain: Chain;
+};
+
+export type GetAddressByChain = {
+  path: DerivationPath;
   chain: Chain;
 };
