@@ -5,16 +5,16 @@ export type Props = {} & JSX.HTMLAttributes<HTMLElement>;
 export const Hero: Component<Props> = (props) => {
   return (
     <div class={`${props.class || ""}`}>
-      <h1 class="text-5xl text-center mb-5">XChain Address Derivation</h1>
+      <h1 class="text-5xl text-center mb-1">XChain Address Derivation</h1>
       <p class="text-center text-gray-400">
         Utility to derive addresses from a mnemonic phrase (
         <a
-          class=""
+          class="link text-gray-400"
           href="https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki"
         >
           BIP39
         </a>
-        ) or keystore <i>(soon)</i>. Similar to{" "}
+        ) or keystore. Similar to{" "}
         <a href="https://iancoleman.io/bip39/">
           Iancoleman's Mnemonic Code Converter
         </a>

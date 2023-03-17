@@ -28,3 +28,24 @@ export type GetAddressByChain = {
   path: DerivationPath;
   chain: Chain;
 };
+
+export type FormSource = "mnemonic" | "keystore";
+
+export type Form = {
+  /**
+   * network - 'mainnet' or 'stagenet'
+   */
+  network: Network;
+  /**
+   * wallet index
+   */
+  index: number;
+  /**
+   * source - mnemonic or keystore based
+   */
+  source: FormSource;
+  /**
+   * phase
+   */
+  phrase: string;
+};

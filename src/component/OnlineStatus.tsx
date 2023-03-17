@@ -12,7 +12,7 @@ export const OnlineStatus: Component<Props> = (props) => {
           class="w-full"
           type="warning"
           headline="Security alert"
-          description="Turn off your Internet connection before entering your phrase."
+          description="Turn off your Internet connection before entering your phrase or uploading your keystore."
         />
       </Show>
 

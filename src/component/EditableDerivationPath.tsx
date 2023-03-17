@@ -68,7 +68,6 @@ export const EditableDerivationPath: Component<Props> = (props) => {
 
   return (
     <div class={`w-full flex items-center ${props.class || ""}`}>
-      {/* <p>editable {editable().toString()}</p> */}
       <Show when={!editable()}>
         <p
           class="text-base text-gray-400 m-0 cursor-pointer"

@@ -1,52 +1,108 @@
-import { Component, Show, JSX } from "solid-js";
+import { Component, Show, JSX, Match, Switch } from "solid-js";
 
 import { useFormHandler, yupSchema } from "solid-form-handler";
 import {
   setPhrase,
   setNetwork,
-  form,
   setIndex,
-  INITIAL_FORM,
   resetData,
+  setSource,
 } from "../store";
-import { phraseFormSchema } from "../util/validation";
-import { Network } from "../types";
+import { keystoreFormSchema, phraseFormSchema } from "../util/validation";
+import * as T from "../types";
+import { decryptFromKeystore } from "@xchainjs/xchain-crypto";
 
-export type Props = {} & JSX.HTMLAttributes<HTMLElement>;
+export type Props = { form: T.Form } & JSX.HTMLAttributes<HTMLElement>;
 
 export const Form: Component<Props> = (props) => {
-  const formHandler = useFormHandler(
-    yupSchema(phraseFormSchema({ index: INITIAL_FORM.index })),
+  const isKeystoreForm = () => props.form.source === "keystore";
+  const isPhraseForm = () => props.form.source === "mnemonic";
+
+  const phraseFormHandler = useFormHandler(
+    yupSchema(phraseFormSchema({ index: props.form.index })),
     {
       validateOn: ["input"],
     }
   );
 
-  const { formData } = formHandler;
+  const keystoreFormHandler = useFormHandler(
+    yupSchema(keystoreFormSchema({ index: props.form.index })),
+    {
+      validateOn: ["input"],
+    }
+  );
+
+  const formHandler = () =>
+    isKeystoreForm() ? keystoreFormHandler : phraseFormHandler;
 
   const submit = async (event: Event) => {
     event.preventDefault();
+
+    await formHandler().validateForm();
+
     try {
-      await formHandler.validateForm();
-    } catch (error) {}
+      // Handle phrase form
+      if (isPhraseForm() && !formHandler().isFormInvalid()) {
+        setPhrase(formHandler().getFieldValue("phrase"), props.form.source);
+      }
+
+      // Handle keystore form
+      if (
+        isKeystoreForm() &&
+        !formHandler().isFieldInvalid("password") &&
+        !formHandler().isFieldInvalid("keystore")
+      ) {
+        const keystore = formHandler().getFieldValue("keystore");
+        const password = formHandler().getFieldValue("password");
+        const phrase = await decryptFromKeystore(
+          // Form's keystore is a string, but needs to be passed as JSON
+          JSON.parse(keystore),
+          password
+        );
+        setPhrase(phrase, props.form.source);
+      }
+    } catch (error) {
+      console.error("SUBMIT form error", error);
+    }
   };
 
   const reset = () => {
-    formHandler.resetForm();
+    formHandler().resetForm();
     resetData();
   };
 
   const onChangePhrase = async ({ currentTarget: { name, value } }) => {
-    await formHandler.setFieldValue(name, value);
-    if (!formHandler.isFieldInvalid("phrase")) {
-      setPhrase(value);
-    }
+    await formHandler().setFieldValue(name, value);
+  };
+
+  const onChangePassword = async ({ currentTarget: { name, value } }) => {
+    await formHandler().setFieldValue(name, value);
   };
 
   const onChangeIndex = async ({ currentTarget: { name, value } }) => {
-    await formHandler.setFieldValue(name, value);
-    if (!formHandler.isFieldInvalid("index")) {
+    await formHandler().setFieldValue(name, value);
+    if (!formHandler().isFieldInvalid("index")) {
       setIndex(parseInt(value));
+    }
+  };
+
+  const onChangeSource = async ({ currentTarget: { value } }) => {
+    await formHandler().resetForm();
+    setSource(value as T.FormSource);
+  };
+
+  const onKeystoreFileSelected = async (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    const file = target.files?.[0];
+
+    if (file) {
+      try {
+        const data = await file.text();
+        // We store keyfile as string (not JSON)
+        await formHandler().setFieldValue("keystore", data);
+      } catch (error) {
+        console.log("error:", error);
+      }
     }
   };
 
@@ -55,36 +111,120 @@ export const Form: Component<Props> = (props) => {
       class={`card px-12 pb-12 text-lg mt-10  ${props.class || ""}`}
       onSubmit={submit}
     >
-      <h1 class="2xl pt-4 pb-6">Source</h1>
-      {/* phrase */}
-      <label class="w-full ">
-        <div class="flex items-center">
-          Phrase
-          <Show when={!formHandler.isFieldInvalid("phrase")}>
-            <div class="ml-2 text-2xl text-green-600">✓</div>
+      {/* <p>form store {JSON.stringify(props.form)}</p>
+      <p>formData {JSON.stringify(formHandler().formData())}</p> */}
+      {/* source */}
+      <div class="mt-6">
+        <label for="mnemonic" class="inline-flex items-center">
+          <input
+            id="mnemonic"
+            type="radio"
+            class="form-radio"
+            name="source"
+            value="mnemonic"
+            checked={props.form.source === "mnemonic"}
+            onChange={onChangeSource}
+          />
+          <div class="flex items-center ml-2">
+            Phrase
+            <Show
+              when={isPhraseForm() && !formHandler().isFieldInvalid("phrase")}
+            >
+              <span class="ml-2 text-2xl text-green-600">✓</span>
+            </Show>
+          </div>
+        </label>
+        <label for="keystore" class="inline-flex items-center ml-4">
+          <input
+            id="keystore"
+            type="radio"
+            class="form-radio"
+            name="source"
+            value="keystore"
+            checked={props.form.source === "keystore"}
+            onChange={onChangeSource}
+          />
+          <div class="flex items-center ml-2">Keystore</div>
+        </label>
+      </div>
+      <Switch>
+        {/* phrase */}
+        <Match when={isPhraseForm()}>
+          <div class="flex flex-col w-full">
+            <textarea
+              data-testid="phrase"
+              name="phrase"
+              value={props.form.phrase}
+              // value={formHandler().getFieldValue("phrase")}
+              class="form-textarea mt-1 block w-full placeholder:text-gray-400 h-40"
+              classList={{
+                "border border-red-500 focus:border-red-500 focus:ring-red-500":
+                  formHandler().fieldHasError("phrase"),
+              }}
+              placeholder="Enter your phrase (12 or 24 words) here..."
+              oninput={onChangePhrase}
+            />
+          </div>
+          <Show when={formHandler().isFieldInvalid("phrase")}>
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+              {formHandler().getFieldError("phrase")}
+            </p>
           </Show>
-        </div>
-        <textarea
-          data-testid="phrase"
-          rows="3"
-          name="phrase"
-          value={form.phrase}
-          // value={formHandler.getFieldValue("phrase")}
-          class="form-textarea mt-1 block w-full placeholder:text-gray-400"
-          classList={{
-            "border border-red-500 focus:border-red-500 focus:ring-red-500":
-              formHandler.fieldHasError("phrase"),
-          }}
-          placeholder="Enter your phrase (12 or 24 words) here..."
-          oninput={onChangePhrase}
-        />
-      </label>
-
-      <Show when={formHandler.isFieldInvalid("phrase")}>
-        <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-          {formHandler.getFieldError("phrase")}
-        </p>
-      </Show>
+        </Match>
+        {/* keystore */}
+        <Match when={isKeystoreForm()}>
+          <div class="flex flex-col items-center justify-center h-40 w-full border rounded-sm border-gray-200 bg-gray-50">
+            <label for="keystore-file" class="btn btn-outline text-sm bg-white">
+              Select Keystore
+              <input
+                id="keystore-file"
+                name="keystore-file"
+                class="hidden"
+                type="file"
+                onchange={onKeystoreFileSelected}
+              />
+            </label>
+            <label for="password" class="flex items-center mt-3">
+              <input
+                class="form-input"
+                classList={{
+                  "border border-red-500 focus:border-red-500 focus:ring-red-500":
+                    formHandler().fieldHasError("password"),
+                }}
+                data-testid="password"
+                id="password"
+                type="password"
+                name="password"
+                value={formHandler().getFieldValue("password")}
+                placeholder="Enter keystore password"
+                oninput={onChangePassword}
+              />
+            </label>
+          </div>
+          <Show when={formHandler().isFieldInvalid("keystore")}>
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+              {formHandler().getFieldError("keystore")}
+            </p>
+          </Show>
+          <Show when={formHandler().isFieldInvalid("password")}>
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+              {formHandler().getFieldError("password")}
+            </p>
+          </Show>
+          {/* show phrase error only if keystore + password is already valid */}
+          <Show
+            when={
+              formHandler().isFieldInvalid("phrase") &&
+              !formHandler().isFieldInvalid("keystore") &&
+              !formHandler().isFieldInvalid("password")
+            }
+          >
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+              {formHandler().getFieldError("phrase")}
+            </p>
+          </Show>
+        </Match>
+      </Switch>
 
       {/* network */}
       <div class="my-4 flex items-center">
@@ -96,8 +236,8 @@ export const Form: Component<Props> = (props) => {
             class="form-radio"
             name="network"
             value="mainnet"
-            checked={form.network === "mainnet"}
-            onChange={(e) => setNetwork(e.currentTarget.value as Network)}
+            checked={props.form.network === "mainnet"}
+            onChange={(e) => setNetwork(e.currentTarget.value as T.Network)}
           />
           <span class="ml-2">Mainnet</span>
         </label>
@@ -108,10 +248,10 @@ export const Form: Component<Props> = (props) => {
             class="form-radio"
             name="network"
             value="stagenet"
-            checked={form.network === "stagenet"}
-            onChange={(e) => setNetwork(e.currentTarget.value as Network)}
+            checked={props.form.network === "stagenet"}
+            onChange={(e) => setNetwork(e.currentTarget.value as T.Network)}
           />
-          <span class="ml-2">Chaosnet</span>
+          <span class="ml-2">Stagenet</span>
         </label>
       </div>
 
@@ -123,36 +263,38 @@ export const Form: Component<Props> = (props) => {
             class="form-input w-[80px]"
             classList={{
               "border border-red-500 focus:border-red-500 focus:ring-red-500":
-                formHandler.fieldHasError("index"),
+                formHandler().fieldHasError("index"),
             }}
             data-testid="index"
             id="index"
             type="number"
             min="0"
             name="index"
-            value={form.index}
+            value={props.form.index}
             oninput={onChangeIndex}
           />
-          <Show when={!formHandler.isFieldInvalid("index")}>
-            <div class="ml-2 text-2xl text-green-600">✓</div>
-          </Show>
         </label>
-        <Show when={formHandler.isFieldInvalid("index")}>
+        <Show when={formHandler().isFieldInvalid("index")}>
           <p class="mt-2 text-sm text-red-600">
-            {formHandler.getFieldError("index")}
+            {formHandler().getFieldError("index")}
           </p>
         </Show>
       </div>
 
       {/* form buttons */}
+      <div class="flex items-center mt-12 ">
+        <button class="btn text-xl" type="submit">
+          Derive addresses
+        </button>
 
-      <button
-        class="ease btn btn-outline px-20 mt-5"
-        onClick={reset}
-        type="button"
-      >
-        Reset All Data
-      </button>
+        <button
+          class="ease btn btn-outline ml-5 text-xl"
+          onClick={reset}
+          type="button"
+        >
+          Reset all data
+        </button>
+      </div>
     </form>
   );
 };
