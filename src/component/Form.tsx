@@ -13,6 +13,7 @@ import { keystoreFormSchema, phraseFormSchema } from "../util/validation";
 import * as T from "../types";
 import { decryptFromKeystore } from "@xchainjs/xchain-crypto";
 import { LoaderIcon } from "./icon/LoaderIcon";
+import { CheckIcon } from "./icon/CheckIcon";
 
 export type Props = { form: T.Form } & JSX.HTMLAttributes<HTMLElement>;
 
@@ -132,7 +133,7 @@ export const Form: Component<Props> = (props) => {
             <Show
               when={isPhraseForm() && !formHandler().isFieldInvalid("phrase")}
             >
-              <span class="ml-2 text-2xl text-green-600">✓</span>
+              <CheckIcon class="ml-2 text-green-600" />
             </Show>
           </div>
         </label>
@@ -146,7 +147,14 @@ export const Form: Component<Props> = (props) => {
             checked={props.form.source === "keystore"}
             onChange={onChangeSource}
           />
-          <div class="flex items-center ml-2">Keystore</div>
+          <div class="flex items-center ml-2">
+            Keystore{" "}
+            <Show
+              when={isKeystoreForm() && !formHandler().isFieldInvalid("keystore")}
+            >
+              <CheckIcon class="ml-2 text-green-600" />
+            </Show>
+          </div>
         </label>
       </div>
       <Switch>
