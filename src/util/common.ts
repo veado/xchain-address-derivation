@@ -1,4 +1,5 @@
 import { BNBChain } from "@xchainjs/xchain-binance";
+import { BSCChain } from "@xchainjs/xchain-bsc";
 import { Network as ClientNetwork } from "@xchainjs/xchain-client";
 import { GAIAChain } from "@xchainjs/xchain-cosmos";
 import { ETHChain } from "@xchainjs/xchain-ethereum";
@@ -18,6 +19,8 @@ export const chainToString = (chain: Chain) => {
       return 'Cosmos'
     case ETHChain:
       return 'Ethereum'
+    case BSCChain:
+      return 'Binance Smart Chain'
   }
 }
 

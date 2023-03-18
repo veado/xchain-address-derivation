@@ -25,6 +25,7 @@ import { MAYAChain } from "@xchainjs/xchain-mayachain";
 import { BNBChain } from "@xchainjs/xchain-binance";
 import { GAIAChain } from "@xchainjs/xchain-cosmos";
 import { ETHChain } from "@xchainjs/xchain-ethereum";
+import { BSCChain } from "@xchainjs/xchain-bsc";
 
 /**
  * Derivation paths
@@ -54,6 +55,10 @@ export const INITIAL_DERIVATION_PATHS: DerivationPaths = {
   // m/44'/60'/0'/0//0
   // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-ethereum/src/client.ts#L125
   ETH: [44, 60, 0, 0, 0],
+  // BSC
+  // m/44'/60'/0'/0//0
+  // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-bsc/src/const.ts#L82
+  BSC: [44, 60, 0, 0, 0],
 };
 
 export const [derivationPaths, setDerivationPaths] =
@@ -151,6 +156,13 @@ const {
   reset: resetAddressEth,
 } = createAddressRessource();
 
+// BSC
+const {
+  resource: addressResourceBsc,
+  get: getAddressBsc,
+  reset: resetAddressBsc,
+} = createAddressRessource();
+
 export const INITIAL_ADDRESSES: Addresses = [
   {
     chain: THORChain,
@@ -161,6 +173,7 @@ export const INITIAL_ADDRESSES: Addresses = [
   { chain: BNBChain, resource: addressResourceBnb, active: true },
   { chain: GAIAChain, resource: addressResourceGaia, active: true },
   { chain: ETHChain, resource: addressResourceEth, active: true },
+  { chain: BSCChain, resource: addressResourceBsc, active: true },
 ];
 
 const [addresses, setAddresses] = createStore<Addresses>([
@@ -200,6 +213,9 @@ const resetAddressResource = (chain: Chain) => {
     case ETHChain:
       resetAddressEth();
       break;
+    case BSCChain:
+      resetAddressBsc();
+      break;
   }
 };
 
@@ -229,6 +245,9 @@ const deriveAddress = (params: GetAddressParams) => {
       break;
     case ETHChain:
       getAddressEth(params);
+      break;
+    case BSCChain:
+      getAddressBsc(params);
       break;
   }
 };
