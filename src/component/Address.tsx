@@ -2,6 +2,7 @@ import { Component, Match, Switch, JSX } from "solid-js";
 import { deriveAddressByChain } from "../store";
 import * as T from "../types";
 import { chainToString } from "../util/common";
+import { CopyButton } from "./CopyButton";
 import { EditableDerivationPath } from "./EditableDerivationPath";
 
 export type Props = {
@@ -36,7 +37,7 @@ export const Address: Component<Props> = (props) => {
               <p class="text-red-500">Address error ${resource.error()}</p>
             </Match>
             <Match when={resource()}>
-              <p class="">{resource()}</p>
+              <p class="flex items-center">{resource()} <CopyButton class="ml-2 text-gray-400 hover:text-inherit ease" text={resource()} /></p>
             </Match>
             <Match when={resource.state === "ready"}>
               <p class="text-gray-300">No address</p>
