@@ -12,7 +12,7 @@ export const Hero: Component<Props> = (props) => {
 
   return (
     <div class={`${props.class || ""}`}>
-      <h1 class="text-5xl text-center mb-1">XChain Address Derivation</h1>
+      <h1 class="text-5xl text-center mb-1">XChain Address Derivation<sup class="text-xs top-[-3em] bg-yellow-300 rounded-full px-3 py-0.5 shadow-md">beta</sup></h1>
       <p class="text-center text-gray-400 mb-1">
         Utility to derive addresses from a mnemonic phrase (
         <a
