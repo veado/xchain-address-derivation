@@ -1,3 +1,4 @@
+import { AVAXChain, Client as AvaxClient, defaultAvaxParams } from "@xchainjs/xchain-avax";
 import { BNBChain, Client as BnbClient } from "@xchainjs/xchain-binance";
 import { BSCChain, Client as BscClient, defaultBscParams } from "@xchainjs/xchain-bsc";
 import { Client as GaiaClient, GAIAChain } from "@xchainjs/xchain-cosmos";
@@ -175,6 +176,34 @@ const getBscAddress = async ({
   }
 };
 
+const getAvaxAddress = async ({
+  network,
+  phrase,
+  path,
+  chain,
+}: GetAddressParams): Promise<string> => {
+  try {
+    const rootDerivationPath = getRootDerivationPath(path);
+    const client = new AvaxClient({
+      ...defaultAvaxParams,
+      network: toClientNetwork(network),
+      phrase,
+      rootDerivationPaths: {
+        mainnet: rootDerivationPath,
+        stagenet: rootDerivationPath,
+        testnet: null,
+      },
+    });
+    // delay to relax UI
+    await delay(300);
+    const address = client.getAddress(getDerivationPathIndex(path));
+    return address;
+  } catch (e) {
+    console.error(`getAddress ${chain} error: ${e}`);
+    return e;
+  }
+};
+
 export const getAddress = ({
   network,
   phrase,
@@ -194,5 +223,7 @@ export const getAddress = ({
       return getEthAddress({ network, phrase, path, chain });
     case BSCChain:
       return getBscAddress({ network, phrase, path, chain });
+    case AVAXChain:
+      return getAvaxAddress({ network, phrase, path, chain });
   }
 };
