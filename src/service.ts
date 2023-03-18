@@ -1,5 +1,6 @@
 import { BNBChain, Client as BnbClient } from "@xchainjs/xchain-binance";
 import { Client as GaiaClient, GAIAChain } from "@xchainjs/xchain-cosmos";
+import { Client as EthClient, ETHChain } from "@xchainjs/xchain-ethereum";
 import { Client as MayaClient, MAYAChain } from "@xchainjs/xchain-mayachain";
 import { Client as ThorClient, THORChain } from "@xchainjs/xchain-thorchain";
 import { delay } from "@xchainjs/xchain-util";
@@ -118,6 +119,33 @@ const getGaiaAddress = async ({
   }
 };
 
+const getEthAddress = async ({
+  network,
+  phrase,
+  path,
+  chain,
+}: GetAddressParams): Promise<string> => {
+  try {
+    const rootDerivationPath = getRootDerivationPath(path);
+    const client = new EthClient({
+      network: toClientNetwork(network),
+      phrase,
+      rootDerivationPaths: {
+        mainnet: rootDerivationPath,
+        stagenet: rootDerivationPath,
+        testnet: null,
+      },
+    });
+    // delay to relax UI
+    await delay(300);
+    const address = client.getAddress(getDerivationPathIndex(path));
+    return address;
+  } catch (e) {
+    console.error(`getAddress ${chain} error: ${e}`);
+    return e;
+  }
+};
+
 export const getAddress = ({
   network,
   phrase,
@@ -133,5 +161,7 @@ export const getAddress = ({
       return getBnbAddress({ network, phrase, path, chain });
     case GAIAChain:
       return getGaiaAddress({ network, phrase, path, chain });
+    case ETHChain:
+      return getEthAddress({ network, phrase, path, chain });
   }
 };
