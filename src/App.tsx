@@ -8,6 +8,7 @@ import { Hero } from "./component/Hero";
 import { OnlineStatus } from "./component/OnlineStatus";
 import { Addresses } from "./component/Addresses";
 import { addresses, addressesLoading, derivationPaths, form } from "./store";
+import { Footer } from "./component/Footer";
 
 const App: Component = () => {
   const isOnline = useNetworkStatus();
@@ -20,6 +21,7 @@ const App: Component = () => {
         <Form class="mb-10" form={form} />
         <Addresses addresses={addresses} paths={derivationPaths} loading={addressesLoading()} />
       </div>
+      <Footer />
     </div>
   );
 };
