@@ -16,8 +16,8 @@ export const Addresses: Component<Props> = (props) => {
     props.addresses.map((address) => ({ address, path: paths[address.chain] }));
 
   return (
-    <div class={`w-full px-12 pb-12 ${props.class || ""}`}>
-      <h1 class="2xl pt-4 pb-8">Addresses</h1>
+    <div class={`w-full px-12 pb-12 bg-white ${props.class || ""}`}>
+      <h1 class="2xl py-8 mb-0">Addresses</h1>
       <For each={mapAddressList(props.paths)}>
         {({ address, path }) => <Address address={address} path={path} />}
       </For>

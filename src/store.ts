@@ -2,6 +2,8 @@ import {
   Addresses,
   Chain,
   DerivationPaths,
+  Form,
+  FormSource,
   GetAddressByChain,
   GetAddressParams,
   Network,
@@ -17,6 +19,7 @@ import {
 } from "solid-js";
 import { getAddress } from "./service";
 import { setDerivationPathIndex } from "./util/common";
+import { INITIAL_SOURCE_TYPE } from "./const";
 
 export const CHAINS: Chain[] = ["Maya", "THORChain"];
 
@@ -48,24 +51,25 @@ const resetDerivationPaths = () =>
 // Form
 // ------------------------
 
-export type Form = {
-  network: Network /* 'mainnet' or 'stagenet' */;
-  index: number /* wallet index */;
-  phrase: string /* phrase - mnemonic or keystore based */;
-};
-
 export const INITIAL_FORM: Form = {
   network: "mainnet",
   index: 0,
   phrase: "",
+  source: INITIAL_SOURCE_TYPE,
 };
 
 const [form, setForm] = createStore<Form>({ ...INITIAL_FORM });
 const setNetwork = (network: Network) => setForm("network", network);
 const setIndex = (index: number) => setForm("index", index);
-const setPhrase = (phrase: string) => setForm("phrase", phrase);
-const resetForm = () => setForm({ ...INITIAL_FORM });
-export { form, setNetwork, setIndex, setPhrase };
+const setPhrase = (phrase: string, source: FormSource) =>
+  setForm((current) => ({ ...current, phrase, source }));
+const setSource = (source: FormSource) =>
+  // we reset phrase whenever source has been changed
+  setForm((current) => ({ ...current, phrase: "", source }));
+// Reset form data, but keep source
+const resetForm = () =>
+  setForm((current) => ({ ...INITIAL_FORM, source: current.source }));
+export { form, setNetwork, setIndex, setPhrase, setSource };
 
 /**
  * Effect to update index of `DerivationPaths`
@@ -217,7 +221,11 @@ createEffect<{
       deriveAddresses();
     }
     // next value to compare
-    return { phrase: form.phrase, network: form.network, index: form.index };
+    return {
+      phrase: form.phrase,
+      network: form.network,
+      index: form.index,
+    };
   },
   // initial values
   { network: form.network, phrase: form.phrase, index: form.index }
