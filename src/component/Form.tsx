@@ -7,10 +7,12 @@ import {
   setIndex,
   resetData,
   setSource,
+  addressesLoading,
 } from "../store";
 import { keystoreFormSchema, phraseFormSchema } from "../util/validation";
 import * as T from "../types";
 import { decryptFromKeystore } from "@xchainjs/xchain-crypto";
+import { LoaderIcon } from "./icon/LoaderIcon";
 
 export type Props = { form: T.Form } & JSX.HTMLAttributes<HTMLElement>;
 
@@ -282,7 +284,14 @@ export const Form: Component<Props> = (props) => {
 
       {/* form buttons */}
       <div class="flex items-center mt-12 ">
-        <button class="btn text-xl" type="submit">
+        <button
+          class="btn text-xl flex items-center disabled:cursor-not-allowed"
+          disabled={addressesLoading()}
+          type="submit"
+        >
+          <Show when={addressesLoading()}>
+            <LoaderIcon class="mr-2 text-white" />
+          </Show>
           Derive addresses
         </button>
 
