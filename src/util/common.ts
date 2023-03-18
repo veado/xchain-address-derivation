@@ -1,7 +1,7 @@
+import { BNBChain } from "@xchainjs/xchain-binance";
 import { Network as ClientNetwork } from "@xchainjs/xchain-client";
 import { MAYAChain } from "@xchainjs/xchain-mayachain";
 import { THORChain } from "@xchainjs/xchain-thorchain";
-import { CHAINS } from "../const";
 import { Chain, DerivationPath, Network } from "../types";
 
 export const chainToString = (chain: Chain) => {
@@ -10,6 +10,8 @@ export const chainToString = (chain: Chain) => {
       return 'MAYAChain'
     case THORChain:
       return 'THORChain'
+    case BNBChain:
+      return 'Binance Chain'
   }
 }
 

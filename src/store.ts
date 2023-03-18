@@ -22,6 +22,7 @@ import { setDerivationPathIndex } from "./util/common";
 import { CHAINS, INITIAL_SOURCE_TYPE } from "./const";
 import { THORChain } from "@xchainjs/xchain-thorchain";
 import { MAYAChain } from "@xchainjs/xchain-mayachain";
+import { BNBChain } from "@xchainjs/xchain-binance";
 
 /**
  * Derivation paths
@@ -35,10 +36,14 @@ export const INITIAL_DERIVATION_PATHS: DerivationPaths = {
   // m/44'/931'/0'/0/0
   // https://github.com/xchainjs/xchainjs-lib/blob/0b284b5289a6d439f21ad30098b61dbfcdaeeee1/packages/xchain-thorchain/src/client.ts#L123-L124
   THOR: [44, 931, 0, 0, 0],
-  // THORChain
+  // Maya
   // m/44'/931'/0'/0/0
   // https://github.com/xchainjs/xchainjs-lib/blob/0b284b5289a6d439f21ad30098b61dbfcdaeeee1/packages/xchain-mayachain/src/client.ts#L113-L114
   MAYA: [44, 931, 0, 0, 0],
+  // Binance
+  // m/44'/931'/0'/0/0
+  // https://github.com/xchainjs/xchainjs-lib/blob/0b284b5289a6d439f21ad30098b61dbfcdaeeee1/packages/xchain-binance/src/client.ts#L96-L97
+  BNB: [44, 931, 0, 0, 0],
 };
 
 export const [derivationPaths, setDerivationPaths] =
@@ -115,6 +120,13 @@ const {
   reset: resetAddressMaya,
 } = createAddressRessource();
 
+// BNB
+const {
+  resource: addressResourceBnb,
+  get: getAddressBnb,
+  reset: resetAddressBnb,
+} = createAddressRessource();
+
 export const INITIAL_ADDRESSES: Addresses = [
   {
     chain: THORChain,
@@ -122,6 +134,7 @@ export const INITIAL_ADDRESSES: Addresses = [
     resource: addressResourceThor,
   },
   { chain: MAYAChain, resource: addressResourceMaya, active: true },
+  { chain: BNBChain, resource: addressResourceBnb, active: true },
 ];
 
 const [addresses, setAddresses] = createStore<Addresses>([
@@ -152,6 +165,9 @@ const resetAddressResource = (chain: Chain) => {
     case THORChain:
       resetAddressThor();
       break;
+    case BNBChain:
+      resetAddressBnb();
+      break;
   }
 };
 
@@ -172,6 +188,9 @@ const deriveAddress = (params: GetAddressParams) => {
       break;
     case THORChain:
       getAddressThor(params);
+      break;
+    case BNBChain:
+      getAddressBnb(params);
       break;
   }
 };
