@@ -1,3 +1,4 @@
+import { AVAXChain } from "@xchainjs/xchain-avax";
 import { BNBChain } from "@xchainjs/xchain-binance";
 import { BSCChain } from "@xchainjs/xchain-bsc";
 import { GAIAChain } from "@xchainjs/xchain-cosmos";
@@ -8,4 +9,12 @@ import { FormSource } from "./types";
 
 export const INITIAL_SOURCE_TYPE: FormSource = "mnemonic";
 
-export const CHAINS = [MAYAChain, THORChain, BNBChain, GAIAChain, ETHChain, BSCChain] as const;
+export const CHAINS = [
+  MAYAChain,
+  THORChain,
+  BNBChain,
+  GAIAChain,
+  ETHChain,
+  BSCChain,
+  AVAXChain,
+] as const;
