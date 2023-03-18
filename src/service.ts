@@ -1,5 +1,5 @@
-import { Client as MayaClient } from "@xchainjs/xchain-mayachain";
-import { Client as ThorClient } from "@xchainjs/xchain-thorchain";
+import { Client as MayaClient, MAYAChain } from "@xchainjs/xchain-mayachain";
+import { Client as ThorClient, THORChain } from "@xchainjs/xchain-thorchain";
 import { delay } from "@xchainjs/xchain-util";
 import { Chain, GetAddressParams, Network } from "./types";
 import { getRootDerivationPath, toClientNetwork } from "./util/common";
@@ -63,9 +63,9 @@ export const getAddress = ({
   chain,
 }: GetAddressParams & { chain: Chain }): Promise<string> => {
   switch (chain) {
-    case "THORChain":
+    case THORChain:
       return getTHORChainAddress({ network, phrase, path });
-    case "Maya":
+    case MAYAChain:
       return getMayaAddress({ network, phrase, path });
   }
 };

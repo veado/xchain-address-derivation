@@ -155,7 +155,6 @@ export const Form: Component<Props> = (props) => {
               data-testid="phrase"
               name="phrase"
               value={props.form.phrase}
-              // value={formHandler().getFieldValue("phrase")}
               class="form-textarea mt-1 block w-full placeholder:text-gray-400 h-40"
               classList={{
                 "border border-red-500 focus:border-red-500 focus:ring-red-500":

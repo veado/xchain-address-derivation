@@ -1,9 +1,10 @@
 import { Network as ClientNetwork } from "@xchainjs/xchain-client";
 import { Resource } from "solid-js";
+import { CHAINS } from "./const";
 
 export type Network = `${ClientNetwork.Mainnet}` | `${ClientNetwork.Stagenet}`;
 
-export type Chain = "Maya" | "THORChain";
+export type Chain = typeof CHAINS[number]
 
 export type AddressResource = Resource<string>;
 export type Address = {

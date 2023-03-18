@@ -19,9 +19,9 @@ import {
 } from "solid-js";
 import { getAddress } from "./service";
 import { setDerivationPathIndex } from "./util/common";
-import { INITIAL_SOURCE_TYPE } from "./const";
-
-export const CHAINS: Chain[] = ["Maya", "THORChain"];
+import { CHAINS, INITIAL_SOURCE_TYPE } from "./const";
+import { THORChain } from "@xchainjs/xchain-thorchain";
+import { MAYAChain } from "@xchainjs/xchain-mayachain";
 
 /**
  * Derivation paths
@@ -34,11 +34,11 @@ export const INITIAL_DERIVATION_PATHS: DerivationPaths = {
   // THORChain
   // m/44'/931'/0'/0/0
   // https://github.com/xchainjs/xchainjs-lib/blob/0b284b5289a6d439f21ad30098b61dbfcdaeeee1/packages/xchain-thorchain/src/client.ts#L123-L124
-  THORChain: [44, 931, 0, 0, 0],
+  THOR: [44, 931, 0, 0, 0],
   // THORChain
   // m/44'/931'/0'/0/0
   // https://github.com/xchainjs/xchainjs-lib/blob/0b284b5289a6d439f21ad30098b61dbfcdaeeee1/packages/xchain-mayachain/src/client.ts#L113-L114
-  Maya: [44, 931, 0, 0, 0],
+  MAYA: [44, 931, 0, 0, 0],
 };
 
 export const [derivationPaths, setDerivationPaths] =
@@ -117,11 +117,11 @@ const {
 
 export const INITIAL_ADDRESSES: Addresses = [
   {
-    chain: "THORChain",
+    chain: THORChain,
     active: true,
     resource: addressResourceThor,
   },
-  { chain: "Maya", resource: addressResourceMaya, active: true },
+  { chain: MAYAChain, resource: addressResourceMaya, active: true },
 ];
 
 const [addresses, setAddresses] = createStore<Addresses>([
@@ -146,10 +146,10 @@ export const setAddressActive = (chain: Chain, active: boolean) =>
  */
 const resetAddressResource = (chain: Chain) => {
   switch (chain) {
-    case "Maya":
+    case MAYAChain:
       resetAddressMaya();
       break;
-    case "THORChain":
+    case THORChain:
       resetAddressThor();
       break;
   }
@@ -167,10 +167,10 @@ createEffect(() => {
 
 const deriveAddress = (params: GetAddressParams) => {
   switch (params.chain) {
-    case "Maya":
+    case MAYAChain:
       getAddressMaya(params);
       break;
-    case "THORChain":
+    case THORChain:
       getAddressThor(params);
       break;
   }

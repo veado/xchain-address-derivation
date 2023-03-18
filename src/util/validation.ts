@@ -20,7 +20,7 @@ const phraseSchema = yup
       const l = value && value.match(/(\w+)\s{0,1}/g).length;
       if (l !== 12 && l !== 24) {
         return ctx.createError({
-          message: "Mnemonic should have 12 or 24 words",
+          message: "Phrase should be 12 or 24 words",
         });
       }
 
