@@ -1,5 +1,17 @@
 import { Network as ClientNetwork } from "@xchainjs/xchain-client";
-import { DerivationPath, Network } from "../types";
+import { MAYAChain } from "@xchainjs/xchain-mayachain";
+import { THORChain } from "@xchainjs/xchain-thorchain";
+import { CHAINS } from "../const";
+import { Chain, DerivationPath, Network } from "../types";
+
+export const chainToString = (chain: Chain) => {
+  switch (chain) {
+    case MAYAChain:
+      return 'MAYAChain'
+    case THORChain:
+      return 'THORChain'
+  }
+}
 
 export const toClientNetwork = (network: Network): ClientNetwork => {
   switch (network) {

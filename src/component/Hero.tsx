@@ -1,12 +1,19 @@
-import { Component, JSX } from "solid-js";
+import { Component, createSignal, JSX, Show } from "solid-js";
+import { CHAINS } from "../const";
+import { chainToString } from "../util/common";
+import { BarUpIcon } from "./icon/BarUpIcon";
 
 export type Props = {} & JSX.HTMLAttributes<HTMLElement>;
 
 export const Hero: Component<Props> = (props) => {
+  const [showMore, setShowMore] = createSignal(false);
+
+  const toggle = () => setShowMore((s) => !s);
+
   return (
     <div class={`${props.class || ""}`}>
       <h1 class="text-5xl text-center mb-1">XChain Address Derivation</h1>
-      <p class="text-center text-gray-400">
+      <p class="text-center text-gray-400 mb-1">
         Utility to derive addresses from a mnemonic phrase (
         <a
           class="link text-gray-400"
@@ -14,19 +21,43 @@ export const Hero: Component<Props> = (props) => {
         >
           BIP39
         </a>
-        ) or keystore. Similar to{" "}
-        <a href="https://iancoleman.io/bip39/">
-          Iancoleman's Mnemonic Code Converter
-        </a>
-        , but using{" "}
-        <a class="" href="https://github.com/xchainjs/xchainjs-lib">
-          xchain-*
-        </a>{" "}
-        packages and for chain assets supported by{" "}
-        <a href="https://thorchain.org"> THORChain</a> and{" "}
-        <a href="https://www.mayaprotocol.com/">Maya</a> only. Currently ATOM,
-        AVAX, BCH, BNB, BTC, DOGE, ETH, LTC, MAYA and RUNE.
+        ) or keystore.{" "}
+        <Show when={showMore()}>
+          <div class="mt-2">
+            Similar to{" "}
+            <a href="https://iancoleman.io/bip39/">
+              Iancoleman's Mnemonic Code Converter
+            </a>
+            , but built on{" "}
+            <a class="" href="https://github.com/xchainjs/xchainjs-lib">
+              xchain-*
+            </a>{" "}
+            and for chains supported by{" "}
+            <a href="https://thorchain.org"> THORChain</a> and{" "}
+            <a href="https://www.mayaprotocol.com/">Maya</a> only. Currently{" "}
+            {[...CHAINS]
+              .sort((a, b) => {
+                const chainA = a.toLowerCase();
+                const chainB = b.toLowerCase();
+                return chainA.localeCompare(chainB);
+              })
+              .map(
+                (chain, index) =>
+                  `${chainToString(chain)} ${
+                    index < CHAINS.length - 1 ? ", " : ""
+                  }`
+              )}
+            .
+          </div>
+        </Show>
       </p>
+      <div
+        class="cursor-pointer flex justify-center"
+        onclick={toggle}
+        classList={{ "rotate-180": !showMore() }}
+      >
+        <BarUpIcon class="text-gray-400 hover:text-inherit w-5 h-5" />
+      </div>
     </div>
   );
 };
