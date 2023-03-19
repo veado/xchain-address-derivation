@@ -11,6 +11,7 @@ import {
   defaultBscParams,
 } from "@xchainjs/xchain-bsc";
 import { Client as GaiaClient, GAIAChain } from "@xchainjs/xchain-cosmos";
+import { Client as DogeClient, DOGEChain } from "@xchainjs/xchain-doge";
 import { Client as EthClient, ETHChain } from "@xchainjs/xchain-ethereum";
 import { Client as LtcClient, LTCChain } from "@xchainjs/xchain-litecoin";
 import { Client as MayaClient, MAYAChain } from "@xchainjs/xchain-mayachain";
@@ -238,6 +239,28 @@ const getLtcAddress = async ({
   return client.getAddress(index);
 };
 
+const getDogeAddress = async ({
+  network,
+  phrase,
+  path,
+}: GetAddressParams): Promise<string> => {
+  const rootDerivationPath = getRootDerivationPath(path);
+  const client = new DogeClient({
+    network: toClientNetwork(network),
+    phrase,
+    sochainApiKey: 'empty', // not needed
+    rootDerivationPaths: {
+      mainnet: rootDerivationPath,
+      stagenet: rootDerivationPath,
+      testnet: null,
+    },
+  });
+  // delay to relax UI
+  await delay(300);
+  const index = getDerivationPathIndex(path);
+  return client.getAddress(index);
+};
+
 export const getAddress = ({
   network,
   phrase,
@@ -266,6 +289,8 @@ export const getAddress = ({
         return getBchAddress({ network, phrase, path, chain });
       case LTCChain:
         return getLtcAddress({ network, phrase, path, chain });
+      case DOGEChain:
+        return getDogeAddress({ network, phrase, path, chain });
     }
   };
 
