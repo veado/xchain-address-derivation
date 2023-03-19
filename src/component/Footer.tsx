@@ -8,7 +8,7 @@ const GH_URL = "https://github.com/veado/xchain-address-derivation";
 export const Footer: Component<Props> = (props) => {
   return (
     <footer
-      class={`w-full flex flex-col items-center justify-center py-2 ${
+      class={`w-full flex flex-col items-center justify-center py-4 ${
         props.class || ""
       }`}
     >

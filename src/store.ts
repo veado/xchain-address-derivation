@@ -348,12 +348,15 @@ const deriveAddress = (params: GetAddressParams) => {
 
 export const deriveAddressByChain = ({ chain, path }: GetAddressByChain) => {
   setDerivationPaths(chain, path);
-  deriveAddress({
-    chain,
-    network: form.network,
-    path,
-    phrase: form.phrase,
-  });
+  if(!!form.phrase) {
+    deriveAddress({
+      chain,
+      network: form.network,
+      path,
+      phrase: form.phrase,
+    });
+  }
+
 };
 
 const deriveAddresses = () => {

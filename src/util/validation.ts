@@ -25,7 +25,7 @@ const phraseSchema = yup
       }
 
       if (!validatePhrase(value)) {
-        return ctx.createError({ message: "Invalid phrase ..." });
+        return ctx.createError({ message: "Invalid phrase." });
       }
 
       return true;
@@ -83,7 +83,7 @@ export const keystoreFormSchema = (defaults: {
       // `string` instead of `JSON`, because `keystoreJSONSchema` does not work here:
       // It throws `required` vs. `optional` field errors (maybe a `yup` bug ???)
       .string()
-      .required("Keystore is missing.")
+      .required("Keystore is missing")
       // 3-step validation of keystore
       // 1. JSON content
       // 2. JSON structure

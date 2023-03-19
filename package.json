@@ -1,12 +1,14 @@
 {
   "name": "xchain-address-derivation",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha1",
   "type": "module",
   "description": "",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "preview": "vite preview",
+    "serve": "vite preview",
+    "deploy": "npm run build && npx gh-pages -d dist"
   },
   "license": "MIT",
   "devDependencies": {

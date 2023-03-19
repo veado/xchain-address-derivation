@@ -9,6 +9,7 @@ import { ETHChain } from "@xchainjs/xchain-ethereum";
 import { LTCChain } from "@xchainjs/xchain-litecoin";
 import { MAYAChain } from "@xchainjs/xchain-mayachain";
 import { THORChain } from "@xchainjs/xchain-thorchain";
+import { Address } from "@xchainjs/xchain-util";
 import { BSCChain } from "../const";
 import { Chain, DerivationPath, Network } from "../types";
 
@@ -79,3 +80,8 @@ export const setDerivationPathAccount =
   (account: number) =>
   (p: DerivationPath): DerivationPath =>
     [p[0], p[1], account, p[3], p[4]];
+
+export const trimAddress = (addr: Address) => {
+  const l = addr.length;
+  return l <= 10 ? addr : `${addr.substring(0, 6)}...${addr.substring(l - 4)}`;
+};

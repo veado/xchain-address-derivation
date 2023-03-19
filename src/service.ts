@@ -6,10 +6,7 @@ import {
 import { BNBChain, Client as BnbClient } from "@xchainjs/xchain-binance";
 import { BTCChain, Client as BtcClient } from "@xchainjs/xchain-bitcoin";
 import { BCHChain, Client as BchClient } from "@xchainjs/xchain-bitcoincash";
-import {
-  Client as BscClient,
-  defaultBscParams,
-} from "@xchainjs/xchain-bsc";
+import { Client as BscClient, defaultBscParams } from "@xchainjs/xchain-bsc";
 import { Client as GaiaClient, GAIAChain } from "@xchainjs/xchain-cosmos";
 import { Client as DogeClient, DOGEChain } from "@xchainjs/xchain-doge";
 import { Client as EthClient, ETHChain } from "@xchainjs/xchain-ethereum";
@@ -182,7 +179,7 @@ const getBtcAddress = async ({
   const rootDerivationPath = getRootDerivationPath(path);
   const client = new BtcClient({
     network: toClientNetwork(network),
-    sochainApiKey: 'empty', // not needed
+    sochainApiKey: "empty", // not needed
     phrase,
     rootDerivationPaths: {
       mainnet: rootDerivationPath,
@@ -226,7 +223,7 @@ const getLtcAddress = async ({
   const client = new LtcClient({
     network: toClientNetwork(network),
     phrase,
-    sochainApiKey: 'empty', // not needed
+    sochainApiKey: "empty", // not needed
     rootDerivationPaths: {
       mainnet: rootDerivationPath,
       stagenet: rootDerivationPath,
@@ -248,7 +245,7 @@ const getDogeAddress = async ({
   const client = new DogeClient({
     network: toClientNetwork(network),
     phrase,
-    sochainApiKey: 'empty', // not needed
+    sochainApiKey: "empty", // not needed
     rootDerivationPaths: {
       mainnet: rootDerivationPath,
       stagenet: rootDerivationPath,
@@ -261,7 +258,7 @@ const getDogeAddress = async ({
   return client.getAddress(index);
 };
 
-export const getAddress = ({
+export const getAddress = async ({
   network,
   phrase,
   path,

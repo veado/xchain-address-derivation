@@ -111,11 +111,11 @@ export const Form: Component<Props> = (props) => {
 
   return (
     <form
-      class={`card px-12 pb-12 text-lg mt-10  ${props.class || ""}`}
+      class={`card px-12 pb-12 text-lg ${props.class || ""}`}
       onSubmit={submit}
     >
-      {/* <p>form store {JSON.stringify(props.form)}</p>
-      <p>formData {JSON.stringify(formHandler().formData())}</p> */}
+      {/* <p>form store {JSON.stringify(props.form)}</p> */}
+      {/* <p>formData {JSON.stringify(formHandler().formData())}</p> */}
       {/* source */}
       <div class="mt-6">
         <label for="mnemonic" class="inline-flex items-center">
@@ -164,8 +164,8 @@ export const Form: Component<Props> = (props) => {
             <textarea
               data-testid="phrase"
               name="phrase"
-              value={props.form.phrase}
-              class="form-textarea mt-1 block w-full placeholder:text-gray-400 h-40"
+              value={formHandler().getFieldValue("phrase")}
+              class="form-textarea mt-1 block w-full placeholder:text-gray-400 h-40 text-lg"
               classList={{
                 "border border-red-500 focus:border-red-500 focus:ring-red-500":
                   formHandler().fieldHasError("phrase"),
@@ -308,7 +308,7 @@ export const Form: Component<Props> = (props) => {
           onClick={reset}
           type="button"
         >
-          Reset all data
+          Reset data
         </button>
       </div>
     </form>
