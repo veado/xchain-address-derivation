@@ -1,11 +1,15 @@
 import { AVAXChain } from "@xchainjs/xchain-avax";
 import { BNBChain } from "@xchainjs/xchain-binance";
-import { BSCChain } from "@xchainjs/xchain-bsc";
+import { BTCChain } from "@xchainjs/xchain-bitcoin";
+import { BCHChain } from "@xchainjs/xchain-bitcoincash";
 import { Network as ClientNetwork } from "@xchainjs/xchain-client";
 import { GAIAChain } from "@xchainjs/xchain-cosmos";
+import { DOGEChain } from "@xchainjs/xchain-doge";
 import { ETHChain } from "@xchainjs/xchain-ethereum";
+import { LTCChain } from "@xchainjs/xchain-litecoin";
 import { MAYAChain } from "@xchainjs/xchain-mayachain";
 import { THORChain } from "@xchainjs/xchain-thorchain";
+import { BSCChain } from "../const";
 import { Chain, DerivationPath, Network } from "../types";
 
 export const chainToString = (chain: Chain) => {
@@ -24,6 +28,14 @@ export const chainToString = (chain: Chain) => {
       return 'Binance Smart Chain'
     case AVAXChain:
       return 'Avalanche'
+    case BTCChain:
+      return 'Bitcoin'
+    case BCHChain:
+      return 'Bitcoin Cash'
+    case LTCChain:
+      return 'Litecoin'
+    case DOGEChain:
+      return 'Dogecoin'
   }
 }
 

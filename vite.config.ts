@@ -33,6 +33,7 @@ export default defineConfig({
       process: "process/browser",
       buffer: "buffer",
       util: "rollup-plugin-node-polyfills/polyfills/util",
+      assert: "rollup-plugin-node-polyfills/polyfills/assert",
       stream: "rollup-plugin-node-polyfills/polyfills/stream",
       events: "rollup-plugin-node-polyfills/polyfills/events",
       crypto: "crypto-browserify",

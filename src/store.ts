@@ -19,14 +19,17 @@ import {
 } from "solid-js";
 import { getAddress } from "./service";
 import { setDerivationPathIndex } from "./util/common";
-import { CHAINS, INITIAL_SOURCE_TYPE } from "./const";
+import { BSCChain, CHAINS, INITIAL_SOURCE_TYPE } from "./const";
 import { THORChain } from "@xchainjs/xchain-thorchain";
 import { MAYAChain } from "@xchainjs/xchain-mayachain";
 import { BNBChain } from "@xchainjs/xchain-binance";
 import { GAIAChain } from "@xchainjs/xchain-cosmos";
 import { ETHChain } from "@xchainjs/xchain-ethereum";
-import { BSCChain } from "@xchainjs/xchain-bsc";
 import { AVAXChain } from "@xchainjs/xchain-avax";
+import { BTCChain } from "@xchainjs/xchain-bitcoin";
+import { BCHChain } from "@xchainjs/xchain-bitcoincash";
+import { LTCChain } from "@xchainjs/xchain-litecoin";
+import { DOGEChain } from "@xchainjs/xchain-doge";
 
 /**
  * Derivation paths
@@ -53,17 +56,33 @@ export const INITIAL_DERIVATION_PATHS: DerivationPaths = {
   // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-cosmos/src/utils.ts#L241
   GAIA: [44, 118, 0, 0, 0],
   // ETH
-  // m/44'/60'/0'/0//0
+  // m/44'/60'/0'/0/0
   // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-ethereum/src/client.ts#L125
   ETH: [44, 60, 0, 0, 0],
   // BSC
-  // m/44'/60'/0'/0//0
+  // m/44'/60'/0'/0/0
   // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-bsc/src/const.ts#L82
   BSC: [44, 60, 0, 0, 0],
   // AVAX
-  // m/44'/60'/0'/0//0
+  // m/44'/60'/0'/0/0
   // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-avax/src/const.ts#L81
   AVAX: [44, 60, 0, 0, 0],
+  // BTC
+  // m/84'/0'/0'/0/0
+  // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-bitcoin/src/client.ts#L59
+  BTC: [84, 0, 0, 0, 0],
+  // BCH
+  // m/44'/145'/0'/0/0
+  // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-bitcoincash/src/client.ts#L55
+  BCH: [44, 145, 0, 0, 0],
+  // LTC
+  // m/84'/2'/0'/0/0
+  // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-litecoin/src/client.ts#L67
+  LTC: [84, 2, 0, 0, 0],
+  // DOGE
+  // m/44'/3'/0'/0/0
+  // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-doge/src/client.ts#L56
+  DOGE: [44, 3, 0, 0, 0],
 };
 
 export const [derivationPaths, setDerivationPaths] =
@@ -175,6 +194,34 @@ const {
   reset: resetAddressAvax,
 } = createAddressRessource();
 
+// BTC
+const {
+  resource: addressResourceBtc,
+  get: getAddressBtc,
+  reset: resetAddressBtc,
+} = createAddressRessource();
+
+// BCH
+const {
+  resource: addressResourceBch,
+  get: getAddressBch,
+  reset: resetAddressBch,
+} = createAddressRessource();
+
+// LTC
+const {
+  resource: addressResourceLtc,
+  get: getAddressLtc,
+  reset: resetAddressLtc,
+} = createAddressRessource();
+
+// DOGE
+const {
+  resource: addressResourceDoge,
+  get: getAddressDoge,
+  reset: resetAddressDoge,
+} = createAddressRessource();
+
 export const INITIAL_ADDRESSES: Addresses = [
   {
     chain: THORChain,
@@ -187,6 +234,10 @@ export const INITIAL_ADDRESSES: Addresses = [
   { chain: ETHChain, resource: addressResourceEth, active: true },
   { chain: BSCChain, resource: addressResourceBsc, active: true },
   { chain: AVAXChain, resource: addressResourceAvax, active: true },
+  { chain: BTCChain, resource: addressResourceBtc, active: true },
+  { chain: BCHChain, resource: addressResourceBch, active: true },
+  { chain: LTCChain, resource: addressResourceLtc, active: true },
+  { chain: DOGEChain, resource: addressResourceDoge, active: true },
 ];
 
 const [addresses, setAddresses] = createStore<Addresses>([
@@ -232,6 +283,18 @@ const resetAddressResource = (chain: Chain) => {
     case AVAXChain:
       resetAddressAvax();
       break;
+    case BTCChain:
+      resetAddressBtc();
+      break;
+    case BCHChain:
+      resetAddressBch();
+      break;
+    case LTCChain:
+      resetAddressLtc();
+      break;
+    case DOGEChain:
+      resetAddressDoge();
+      break;
   }
 };
 
@@ -267,6 +330,18 @@ const deriveAddress = (params: GetAddressParams) => {
       break;
     case AVAXChain:
       getAddressAvax(params);
+      break;
+    case BTCChain:
+      getAddressBtc(params);
+      break;
+    case BCHChain:
+      getAddressBch(params);
+      break;
+    case LTCChain:
+      getAddressLtc(params);
+      break;
+    case DOGEChain:
+      getAddressDoge(params);
       break;
   }
 };

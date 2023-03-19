@@ -38,16 +38,20 @@ export const Addresses: Component<Props> = (props) => {
   const [searchTxt, setSearchTxt] = createSignal<string>("");
 
   const updateAddresses = (search: string, sort: Sort) => {
-    const s = search.toLocaleLowerCase();
+    const s = search.trim().toLocaleLowerCase();
     // filter addresses by `search`
-    const filtered = !!search
+    const filtered = !!s
       ? mapAddressList().filter(
           (address) =>
-            // filter by chain name
+            // filter by chain
+            address.address.chain
+              .toLocaleLowerCase()
+              .includes(s) ||
+            // OR by chain name
             chainToString(address.address.chain)
               .toLocaleLowerCase()
               .includes(s) ||
-            //  or by address
+            // OR by address
             (address.address.resource() &&
               address.address.resource().toLowerCase().includes(s))
         )
@@ -55,8 +59,8 @@ export const Addresses: Component<Props> = (props) => {
 
     // sort addresses
     const sorted = filtered.sort((a, b) => {
-      const chainA = a.address.chain.toLowerCase();
-      const chainB = b.address.chain.toLowerCase();
+      const chainA = chainToString(a.address.chain).toLowerCase();
+      const chainB = chainToString(b.address.chain).toLowerCase();
       return sort === "down"
         ? chainA.localeCompare(chainB)
         : chainB.localeCompare(chainA);
