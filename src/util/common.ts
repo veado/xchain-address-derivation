@@ -1,5 +1,6 @@
 import { AVAXChain } from "@xchainjs/xchain-avax";
 import { BNBChain } from "@xchainjs/xchain-binance";
+import { BTCChain } from "@xchainjs/xchain-bitcoin";
 import { BSCChain } from "@xchainjs/xchain-bsc";
 import { Network as ClientNetwork } from "@xchainjs/xchain-client";
 import { GAIAChain } from "@xchainjs/xchain-cosmos";
@@ -24,6 +25,8 @@ export const chainToString = (chain: Chain) => {
       return 'Binance Smart Chain'
     case AVAXChain:
       return 'Avalanche'
+    case BTCChain:
+      return 'Bitcoin'
   }
 }
 

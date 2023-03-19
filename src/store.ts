@@ -27,6 +27,7 @@ import { GAIAChain } from "@xchainjs/xchain-cosmos";
 import { ETHChain } from "@xchainjs/xchain-ethereum";
 import { BSCChain } from "@xchainjs/xchain-bsc";
 import { AVAXChain } from "@xchainjs/xchain-avax";
+import { BTCChain } from "@xchainjs/xchain-bitcoin";
 
 /**
  * Derivation paths
@@ -53,17 +54,21 @@ export const INITIAL_DERIVATION_PATHS: DerivationPaths = {
   // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-cosmos/src/utils.ts#L241
   GAIA: [44, 118, 0, 0, 0],
   // ETH
-  // m/44'/60'/0'/0//0
+  // m/44'/60'/0'/0/0
   // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-ethereum/src/client.ts#L125
   ETH: [44, 60, 0, 0, 0],
   // BSC
-  // m/44'/60'/0'/0//0
+  // m/44'/60'/0'/0/0
   // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-bsc/src/const.ts#L82
   BSC: [44, 60, 0, 0, 0],
   // AVAX
-  // m/44'/60'/0'/0//0
+  // m/44'/60'/0'/0/0
   // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-avax/src/const.ts#L81
   AVAX: [44, 60, 0, 0, 0],
+  // BTC
+  // m/84'/0'/0'/0/0
+  // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-bitcoin/src/client.ts#L59
+  BTC: [84, 0, 0, 0, 0],
 };
 
 export const [derivationPaths, setDerivationPaths] =
@@ -175,6 +180,13 @@ const {
   reset: resetAddressAvax,
 } = createAddressRessource();
 
+// BTC
+const {
+  resource: addressResourceBtc,
+  get: getAddressBtc,
+  reset: resetAddressBtc,
+} = createAddressRessource();
+
 export const INITIAL_ADDRESSES: Addresses = [
   {
     chain: THORChain,
@@ -187,6 +199,7 @@ export const INITIAL_ADDRESSES: Addresses = [
   { chain: ETHChain, resource: addressResourceEth, active: true },
   { chain: BSCChain, resource: addressResourceBsc, active: true },
   { chain: AVAXChain, resource: addressResourceAvax, active: true },
+  { chain: BTCChain, resource: addressResourceBtc, active: true },
 ];
 
 const [addresses, setAddresses] = createStore<Addresses>([
@@ -232,6 +245,9 @@ const resetAddressResource = (chain: Chain) => {
     case AVAXChain:
       resetAddressAvax();
       break;
+    case BTCChain:
+      resetAddressBtc();
+      break;
   }
 };
 
@@ -267,6 +283,9 @@ const deriveAddress = (params: GetAddressParams) => {
       break;
     case AVAXChain:
       getAddressAvax(params);
+      break;
+    case BTCChain:
+      getAddressBtc(params);
       break;
   }
 };

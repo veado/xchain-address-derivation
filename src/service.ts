@@ -4,6 +4,7 @@ import {
   defaultAvaxParams,
 } from "@xchainjs/xchain-avax";
 import { BNBChain, Client as BnbClient } from "@xchainjs/xchain-binance";
+import { BTCChain, Client as BtcClient } from "@xchainjs/xchain-bitcoin";
 import {
   BSCChain,
   Client as BscClient,
@@ -170,13 +171,35 @@ const getAvaxAddress = async ({
   return client.getAddress(index);
 };
 
+const getBtcAddress = async ({
+  network,
+  phrase,
+  path,
+}: GetAddressParams): Promise<string> => {
+  const rootDerivationPath = getRootDerivationPath(path);
+  const client = new BtcClient({
+    network: toClientNetwork(network),
+    sochainApiKey: 'empty',
+    phrase,
+    rootDerivationPaths: {
+      mainnet: rootDerivationPath,
+      stagenet: rootDerivationPath,
+      testnet: null,
+    },
+  });
+  // delay to relax UI
+  await delay(300);
+  const index = getDerivationPathIndex(path);
+  return client.getAddress(index);
+};
+
 export const getAddress = ({
   network,
   phrase,
   path,
   chain,
 }: GetAddressParams): Promise<string> => {
-  const _getAddress = () => {
+  const run = () => {
     switch (chain) {
       case THORChain:
         return getTHORChainAddress({ network, phrase, path, chain });
@@ -192,10 +215,12 @@ export const getAddress = ({
         return getBscAddress({ network, phrase, path, chain });
       case AVAXChain:
         return getAvaxAddress({ network, phrase, path, chain });
+      case BTCChain:
+        return getBtcAddress({ network, phrase, path, chain });
     }
   };
 
-  return _getAddress().catch((e) => {
+  return run().catch((e) => {
     console.error(`getAddress for ${chainToString(chain)} failed. ${e}`);
     return e;
   });

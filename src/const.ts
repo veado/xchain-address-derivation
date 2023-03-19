@@ -1,6 +1,7 @@
 import { AVAXChain } from "@xchainjs/xchain-avax";
 import { BNBChain } from "@xchainjs/xchain-binance";
-import { BSCChain } from "@xchainjs/xchain-bsc";
+import { BTCChain } from "@xchainjs/xchain-bitcoin";
+// import { BSCChain } from "@xchainjs/xchain-bsc";
 import { GAIAChain } from "@xchainjs/xchain-cosmos";
 import { ETHChain } from "@xchainjs/xchain-ethereum";
 import { MAYAChain } from "@xchainjs/xchain-mayachain";
@@ -8,6 +9,10 @@ import { THORChain } from "@xchainjs/xchain-thorchain";
 import { FormSource } from "./types";
 
 export const INITIAL_SOURCE_TYPE: FormSource = "mnemonic";
+
+// [xchain-bsc] Fix type of BSCChain
+// https://github.com/xchainjs/xchainjs-lib/pull/736
+export const BSCChain = 'BSC' as const
 
 export const CHAINS = [
   MAYAChain,
@@ -17,4 +22,5 @@ export const CHAINS = [
   ETHChain,
   BSCChain,
   AVAXChain,
+  BTCChain
 ] as const;
