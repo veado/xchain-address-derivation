@@ -1,12 +1,13 @@
 import { AVAXChain } from "@xchainjs/xchain-avax";
 import { BNBChain } from "@xchainjs/xchain-binance";
 import { BTCChain } from "@xchainjs/xchain-bitcoin";
-import { BSCChain } from "@xchainjs/xchain-bsc";
+import { BCHChain } from "@xchainjs/xchain-bitcoincash";
 import { Network as ClientNetwork } from "@xchainjs/xchain-client";
 import { GAIAChain } from "@xchainjs/xchain-cosmos";
 import { ETHChain } from "@xchainjs/xchain-ethereum";
 import { MAYAChain } from "@xchainjs/xchain-mayachain";
 import { THORChain } from "@xchainjs/xchain-thorchain";
+import { BSCChain } from "../const";
 import { Chain, DerivationPath, Network } from "../types";
 
 export const chainToString = (chain: Chain) => {
@@ -27,6 +28,8 @@ export const chainToString = (chain: Chain) => {
       return 'Avalanche'
     case BTCChain:
       return 'Bitcoin'
+    case BCHChain:
+      return 'Bitcoin Cash'
   }
 }
 

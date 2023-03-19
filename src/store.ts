@@ -19,15 +19,15 @@ import {
 } from "solid-js";
 import { getAddress } from "./service";
 import { setDerivationPathIndex } from "./util/common";
-import { CHAINS, INITIAL_SOURCE_TYPE } from "./const";
+import { BSCChain, CHAINS, INITIAL_SOURCE_TYPE } from "./const";
 import { THORChain } from "@xchainjs/xchain-thorchain";
 import { MAYAChain } from "@xchainjs/xchain-mayachain";
 import { BNBChain } from "@xchainjs/xchain-binance";
 import { GAIAChain } from "@xchainjs/xchain-cosmos";
 import { ETHChain } from "@xchainjs/xchain-ethereum";
-import { BSCChain } from "@xchainjs/xchain-bsc";
 import { AVAXChain } from "@xchainjs/xchain-avax";
 import { BTCChain } from "@xchainjs/xchain-bitcoin";
+import { BCHChain } from "@xchainjs/xchain-bitcoincash";
 
 /**
  * Derivation paths
@@ -69,6 +69,10 @@ export const INITIAL_DERIVATION_PATHS: DerivationPaths = {
   // m/84'/0'/0'/0/0
   // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-bitcoin/src/client.ts#L59
   BTC: [84, 0, 0, 0, 0],
+  // BCH
+  // m/44'/145'/0'/0/0
+  // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-bitcoincash/src/client.ts#L55
+  BCH: [44, 145, 0, 0, 0],
 };
 
 export const [derivationPaths, setDerivationPaths] =
@@ -187,6 +191,13 @@ const {
   reset: resetAddressBtc,
 } = createAddressRessource();
 
+// BCH
+const {
+  resource: addressResourceBch,
+  get: getAddressBch,
+  reset: resetAddressBch,
+} = createAddressRessource();
+
 export const INITIAL_ADDRESSES: Addresses = [
   {
     chain: THORChain,
@@ -200,6 +211,7 @@ export const INITIAL_ADDRESSES: Addresses = [
   { chain: BSCChain, resource: addressResourceBsc, active: true },
   { chain: AVAXChain, resource: addressResourceAvax, active: true },
   { chain: BTCChain, resource: addressResourceBtc, active: true },
+  { chain: BCHChain, resource: addressResourceBch, active: true },
 ];
 
 const [addresses, setAddresses] = createStore<Addresses>([
@@ -248,6 +260,9 @@ const resetAddressResource = (chain: Chain) => {
     case BTCChain:
       resetAddressBtc();
       break;
+    case BCHChain:
+      resetAddressBch();
+      break;
   }
 };
 
@@ -286,6 +301,9 @@ const deriveAddress = (params: GetAddressParams) => {
       break;
     case BTCChain:
       getAddressBtc(params);
+      break;
+    case BCHChain:
+      getAddressBch(params);
       break;
   }
 };

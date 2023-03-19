@@ -1,6 +1,7 @@
 import { AVAXChain } from "@xchainjs/xchain-avax";
 import { BNBChain } from "@xchainjs/xchain-binance";
 import { BTCChain } from "@xchainjs/xchain-bitcoin";
+import { BCHChain } from "@xchainjs/xchain-bitcoincash";
 // import { BSCChain } from "@xchainjs/xchain-bsc";
 import { GAIAChain } from "@xchainjs/xchain-cosmos";
 import { ETHChain } from "@xchainjs/xchain-ethereum";
@@ -22,5 +23,6 @@ export const CHAINS = [
   ETHChain,
   BSCChain,
   AVAXChain,
-  BTCChain
+  BTCChain,
+  BCHChain
 ] as const;
