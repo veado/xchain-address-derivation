@@ -1,43 +1,42 @@
-import { AVAXChain } from "@xchainjs/xchain-avax";
 import { BNBChain } from "@xchainjs/xchain-binance";
 import { BTCChain } from "@xchainjs/xchain-bitcoin";
 import { BCHChain } from "@xchainjs/xchain-bitcoincash";
 import { Network as ClientNetwork } from "@xchainjs/xchain-client";
 import { GAIAChain } from "@xchainjs/xchain-cosmos";
 import { DOGEChain } from "@xchainjs/xchain-doge";
-import { ETHChain } from "@xchainjs/xchain-ethereum";
 import { LTCChain } from "@xchainjs/xchain-litecoin";
 import { MAYAChain } from "@xchainjs/xchain-mayachain";
 import { THORChain } from "@xchainjs/xchain-thorchain";
-import { BSCChain } from "../const";
+import { Address } from "@xchainjs/xchain-util";
+import { AVAXChain, BSCChain, ETHChain } from "../const";
 import { Chain, DerivationPath, Network } from "../types";
 
 export const chainToString = (chain: Chain) => {
   switch (chain) {
     case MAYAChain:
-      return 'MAYAChain'
+      return "MAYAChain";
     case THORChain:
-      return 'THORChain'
+      return "THORChain";
     case BNBChain:
-      return 'Binance Chain'
+      return "Binance Chain";
     case GAIAChain:
-      return 'Cosmos'
+      return "Cosmos";
     case ETHChain:
-      return 'Ethereum'
+      return "Ethereum";
     case BSCChain:
-      return 'Binance Smart Chain'
+      return "Binance Smart Chain";
     case AVAXChain:
-      return 'Avalanche'
+      return "Avalanche";
     case BTCChain:
-      return 'Bitcoin'
+      return "Bitcoin";
     case BCHChain:
-      return 'Bitcoin Cash'
+      return "Bitcoin Cash";
     case LTCChain:
-      return 'Litecoin'
+      return "Litecoin";
     case DOGEChain:
-      return 'Dogecoin'
+      return "Dogecoin";
   }
-}
+};
 
 export const toClientNetwork = (network: Network): ClientNetwork => {
   switch (network) {
@@ -79,3 +78,8 @@ export const setDerivationPathAccount =
   (account: number) =>
   (p: DerivationPath): DerivationPath =>
     [p[0], p[1], account, p[3], p[4]];
+
+export const trimAddress = (addr: Address) => {
+  const l = addr.length;
+  return l <= 10 ? addr : `${addr.substring(0, 6)}...${addr.substring(l - 4)}`;
+};

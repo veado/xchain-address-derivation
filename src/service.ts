@@ -1,23 +1,14 @@
-import {
-  AVAXChain,
-  Client as AvaxClient,
-  defaultAvaxParams,
-} from "@xchainjs/xchain-avax";
+import { Client as EvmClient } from "@xchainjs/xchain-evm";
 import { BNBChain, Client as BnbClient } from "@xchainjs/xchain-binance";
 import { BTCChain, Client as BtcClient } from "@xchainjs/xchain-bitcoin";
 import { BCHChain, Client as BchClient } from "@xchainjs/xchain-bitcoincash";
-import {
-  Client as BscClient,
-  defaultBscParams,
-} from "@xchainjs/xchain-bsc";
 import { Client as GaiaClient, GAIAChain } from "@xchainjs/xchain-cosmos";
 import { Client as DogeClient, DOGEChain } from "@xchainjs/xchain-doge";
-import { Client as EthClient, ETHChain } from "@xchainjs/xchain-ethereum";
 import { Client as LtcClient, LTCChain } from "@xchainjs/xchain-litecoin";
 import { Client as MayaClient, MAYAChain } from "@xchainjs/xchain-mayachain";
 import { Client as ThorClient, THORChain } from "@xchainjs/xchain-thorchain";
 import { delay } from "@xchainjs/xchain-util";
-import { BSCChain } from "./const";
+import { AVAXChain, BSCChain, ETHChain } from "./const";
 import { GetAddressParams } from "./types";
 import {
   getRootDerivationPath,
@@ -112,10 +103,20 @@ const getEthAddress = async ({
   network,
   phrase,
   path,
-  chain,
 }: GetAddressParams): Promise<string> => {
   const rootDerivationPath = getRootDerivationPath(path);
-  const client = new EthClient({
+  // No need to use `xchain-ethereum`s `Client`
+  // It extends from `EvmClient`,
+  // which provides all we need to derive addresses
+  const client = new EvmClient({
+    chain: null,
+    gasAsset: null,
+    gasAssetDecimals: null,
+    defaults: null,
+    providers: null,
+    explorerProviders: null,
+    dataProviders: null,
+    feeBounds: null,
     network: toClientNetwork(network),
     phrase,
     rootDerivationPaths: {
@@ -136,8 +137,18 @@ const getBscAddress = async ({
   path,
 }: GetAddressParams): Promise<string> => {
   const rootDerivationPath = getRootDerivationPath(path);
-  const client = new BscClient({
-    ...defaultBscParams,
+  // No need to use `xchain-bsc`s `Client`
+  // It extends from `EvmClient`,
+  // which provides all we need to derive addresses
+  const client = new EvmClient({
+    chain: null,
+    gasAsset: null,
+    gasAssetDecimals: null,
+    defaults: null,
+    providers: null,
+    explorerProviders: null,
+    dataProviders: null,
+    feeBounds: null,
     network: toClientNetwork(network),
     phrase,
     rootDerivationPaths: {
@@ -158,8 +169,18 @@ const getAvaxAddress = async ({
   path,
 }: GetAddressParams): Promise<string> => {
   const rootDerivationPath = getRootDerivationPath(path);
-  const client = new AvaxClient({
-    ...defaultAvaxParams,
+  // No need to use `xchain-avax` `Client`
+  // It extends from `EvmClient`,
+  // which provides all we need to derive addresses
+  const client = new EvmClient({
+    chain: null,
+    gasAsset: null,
+    gasAssetDecimals: null,
+    defaults: null,
+    providers: null,
+    explorerProviders: null,
+    dataProviders: null,
+    feeBounds: null,
     network: toClientNetwork(network),
     phrase,
     rootDerivationPaths: {
@@ -182,7 +203,7 @@ const getBtcAddress = async ({
   const rootDerivationPath = getRootDerivationPath(path);
   const client = new BtcClient({
     network: toClientNetwork(network),
-    sochainApiKey: 'empty', // not needed
+    sochainApiKey: "empty", // not needed
     phrase,
     rootDerivationPaths: {
       mainnet: rootDerivationPath,
@@ -226,7 +247,7 @@ const getLtcAddress = async ({
   const client = new LtcClient({
     network: toClientNetwork(network),
     phrase,
-    sochainApiKey: 'empty', // not needed
+    sochainApiKey: "empty", // not needed
     rootDerivationPaths: {
       mainnet: rootDerivationPath,
       stagenet: rootDerivationPath,
@@ -248,7 +269,7 @@ const getDogeAddress = async ({
   const client = new DogeClient({
     network: toClientNetwork(network),
     phrase,
-    sochainApiKey: 'empty', // not needed
+    sochainApiKey: "empty", // not needed
     rootDerivationPaths: {
       mainnet: rootDerivationPath,
       stagenet: rootDerivationPath,
@@ -261,7 +282,7 @@ const getDogeAddress = async ({
   return client.getAddress(index);
 };
 
-export const getAddress = ({
+export const getAddress = async ({
   network,
   phrase,
   path,

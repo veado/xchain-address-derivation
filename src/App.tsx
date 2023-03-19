@@ -17,7 +17,7 @@ const App: Component = () => {
     <div class="flex flex-col items-center bg-gray-50">
       <OnlineStatus isOnline={isOnline()} />
       <div class="container p-6 md:p-16 max-w-5xl">
-        <Hero class="mx-6" />
+        <Hero class="my-6" />
         <Form class="mb-10" form={form} />
         <Addresses addresses={addresses} paths={derivationPaths} loading={addressesLoading()} />
       </div>

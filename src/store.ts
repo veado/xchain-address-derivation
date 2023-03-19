@@ -19,13 +19,17 @@ import {
 } from "solid-js";
 import { getAddress } from "./service";
 import { setDerivationPathIndex } from "./util/common";
-import { BSCChain, CHAINS, INITIAL_SOURCE_TYPE } from "./const";
+import {
+  AVAXChain,
+  BSCChain,
+  CHAINS,
+  ETHChain,
+  INITIAL_SOURCE_TYPE,
+} from "./const";
 import { THORChain } from "@xchainjs/xchain-thorchain";
 import { MAYAChain } from "@xchainjs/xchain-mayachain";
 import { BNBChain } from "@xchainjs/xchain-binance";
 import { GAIAChain } from "@xchainjs/xchain-cosmos";
-import { ETHChain } from "@xchainjs/xchain-ethereum";
-import { AVAXChain } from "@xchainjs/xchain-avax";
 import { BTCChain } from "@xchainjs/xchain-bitcoin";
 import { BCHChain } from "@xchainjs/xchain-bitcoincash";
 import { LTCChain } from "@xchainjs/xchain-litecoin";
@@ -348,12 +352,14 @@ const deriveAddress = (params: GetAddressParams) => {
 
 export const deriveAddressByChain = ({ chain, path }: GetAddressByChain) => {
   setDerivationPaths(chain, path);
-  deriveAddress({
-    chain,
-    network: form.network,
-    path,
-    phrase: form.phrase,
-  });
+  if (!!form.phrase) {
+    deriveAddress({
+      chain,
+      network: form.network,
+      path,
+      phrase: form.phrase,
+    });
+  }
 };
 
 const deriveAddresses = () => {

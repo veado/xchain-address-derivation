@@ -1,15 +1,18 @@
 import { defineConfig } from "vite";
 import solidPlugin from "vite-plugin-solid";
-import { readFile } from 'fs/promises';
-import { resolve } from 'path';
-import { execSync } from 'child_process';
-
+import { readFile } from "fs/promises";
+import { resolve } from "path";
+import { execSync } from "child_process";
 
 // read package.json
-const { version } = JSON.parse(await readFile(resolve('./package.json'), 'utf-8'));
+const { version } = JSON.parse(
+  await readFile(resolve("./package.json"), "utf-8")
+);
 
 // Add commit hash to Vite's `env`
-process.env.VITE_COMMIT_HASH = execSync('git rev-parse --short HEAD').toString().trim();
+process.env.VITE_COMMIT_HASH = execSync("git rev-parse --short HEAD")
+  .toString()
+  .trim();
 
 // Add version no. hash to Vite's `env`
 process.env.VITE_VERSION = version;
@@ -19,6 +22,8 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  // https://vitejs.dev/config/#base
+  base: "/xchain-address-derivation/",
   build: {
     target: "esnext",
     commonjsOptions: {
