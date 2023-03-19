@@ -5,6 +5,7 @@ import { BCHChain } from "@xchainjs/xchain-bitcoincash";
 import { Network as ClientNetwork } from "@xchainjs/xchain-client";
 import { GAIAChain } from "@xchainjs/xchain-cosmos";
 import { ETHChain } from "@xchainjs/xchain-ethereum";
+import { LTCChain } from "@xchainjs/xchain-litecoin";
 import { MAYAChain } from "@xchainjs/xchain-mayachain";
 import { THORChain } from "@xchainjs/xchain-thorchain";
 import { BSCChain } from "../const";
@@ -30,6 +31,8 @@ export const chainToString = (chain: Chain) => {
       return 'Bitcoin'
     case BCHChain:
       return 'Bitcoin Cash'
+    case LTCChain:
+      return 'Litecoin'
   }
 }
 

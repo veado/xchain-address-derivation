@@ -5,6 +5,7 @@ import { BCHChain } from "@xchainjs/xchain-bitcoincash";
 // import { BSCChain } from "@xchainjs/xchain-bsc";
 import { GAIAChain } from "@xchainjs/xchain-cosmos";
 import { ETHChain } from "@xchainjs/xchain-ethereum";
+import { LTCChain } from "@xchainjs/xchain-litecoin";
 import { MAYAChain } from "@xchainjs/xchain-mayachain";
 import { THORChain } from "@xchainjs/xchain-thorchain";
 import { FormSource } from "./types";
@@ -24,5 +25,6 @@ export const CHAINS = [
   BSCChain,
   AVAXChain,
   BTCChain,
-  BCHChain
+  BCHChain,
+  LTCChain
 ] as const;

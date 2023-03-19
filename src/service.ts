@@ -12,6 +12,7 @@ import {
 } from "@xchainjs/xchain-bsc";
 import { Client as GaiaClient, GAIAChain } from "@xchainjs/xchain-cosmos";
 import { Client as EthClient, ETHChain } from "@xchainjs/xchain-ethereum";
+import { Client as LtcClient, LTCChain } from "@xchainjs/xchain-litecoin";
 import { Client as MayaClient, MAYAChain } from "@xchainjs/xchain-mayachain";
 import { Client as ThorClient, THORChain } from "@xchainjs/xchain-thorchain";
 import { delay } from "@xchainjs/xchain-util";
@@ -180,7 +181,7 @@ const getBtcAddress = async ({
   const rootDerivationPath = getRootDerivationPath(path);
   const client = new BtcClient({
     network: toClientNetwork(network),
-    sochainApiKey: 'empty',
+    sochainApiKey: 'empty', // not needed
     phrase,
     rootDerivationPaths: {
       mainnet: rootDerivationPath,
@@ -203,6 +204,28 @@ const getBchAddress = async ({
   const client = new BchClient({
     network: toClientNetwork(network),
     phrase,
+    rootDerivationPaths: {
+      mainnet: rootDerivationPath,
+      stagenet: rootDerivationPath,
+      testnet: null,
+    },
+  });
+  // delay to relax UI
+  await delay(300);
+  const index = getDerivationPathIndex(path);
+  return client.getAddress(index);
+};
+
+const getLtcAddress = async ({
+  network,
+  phrase,
+  path,
+}: GetAddressParams): Promise<string> => {
+  const rootDerivationPath = getRootDerivationPath(path);
+  const client = new LtcClient({
+    network: toClientNetwork(network),
+    phrase,
+    sochainApiKey: 'empty', // not needed
     rootDerivationPaths: {
       mainnet: rootDerivationPath,
       stagenet: rootDerivationPath,
@@ -241,6 +264,8 @@ export const getAddress = ({
         return getBtcAddress({ network, phrase, path, chain });
       case BCHChain:
         return getBchAddress({ network, phrase, path, chain });
+      case LTCChain:
+        return getLtcAddress({ network, phrase, path, chain });
     }
   };
 

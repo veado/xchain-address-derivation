@@ -28,6 +28,7 @@ import { ETHChain } from "@xchainjs/xchain-ethereum";
 import { AVAXChain } from "@xchainjs/xchain-avax";
 import { BTCChain } from "@xchainjs/xchain-bitcoin";
 import { BCHChain } from "@xchainjs/xchain-bitcoincash";
+import { LTCChain } from "@xchainjs/xchain-litecoin";
 
 /**
  * Derivation paths
@@ -73,6 +74,10 @@ export const INITIAL_DERIVATION_PATHS: DerivationPaths = {
   // m/44'/145'/0'/0/0
   // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-bitcoincash/src/client.ts#L55
   BCH: [44, 145, 0, 0, 0],
+  // LTC
+  // m/84'/2'/0'/0/0
+  // https://github.com/xchainjs/xchainjs-lib/blob/master/packages/xchain-litecoin/src/client.ts#L67
+  LTC: [84, 2, 0, 0, 0],
 };
 
 export const [derivationPaths, setDerivationPaths] =
@@ -198,6 +203,13 @@ const {
   reset: resetAddressBch,
 } = createAddressRessource();
 
+// LTC
+const {
+  resource: addressResourceLtc,
+  get: getAddressLtc,
+  reset: resetAddressLtc,
+} = createAddressRessource();
+
 export const INITIAL_ADDRESSES: Addresses = [
   {
     chain: THORChain,
@@ -212,6 +224,7 @@ export const INITIAL_ADDRESSES: Addresses = [
   { chain: AVAXChain, resource: addressResourceAvax, active: true },
   { chain: BTCChain, resource: addressResourceBtc, active: true },
   { chain: BCHChain, resource: addressResourceBch, active: true },
+  { chain: LTCChain, resource: addressResourceLtc, active: true },
 ];
 
 const [addresses, setAddresses] = createStore<Addresses>([
@@ -263,6 +276,9 @@ const resetAddressResource = (chain: Chain) => {
     case BCHChain:
       resetAddressBch();
       break;
+    case LTCChain:
+      resetAddressLtc();
+      break;
   }
 };
 
@@ -304,6 +320,9 @@ const deriveAddress = (params: GetAddressParams) => {
       break;
     case BCHChain:
       getAddressBch(params);
+      break;
+    case LTCChain:
+      getAddressLtc(params);
       break;
   }
 };
