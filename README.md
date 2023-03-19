@@ -5,7 +5,7 @@
 
 ## Live
 
-:eyes: https://veado.github.io/xchain-address-derivation
+:eyes: https://veado.github.io/xchain-address-derivation/
 
 ## Preview
 
@@ -20,12 +20,21 @@
 npm i
 npm run dev
 ```
-Open http://localhost:3000/
+Open http://localhost:3000/xchain-address-derivation/
 
 ## Production build
 
 ```bash
 npm run build
+```
+
+## Prepare deployment
+
+```bash
+# Build sources for deployment into 'dist` folder
+npm run build
+# check deployment locally by opening http://localhost:4173/xchain-address-derivation/
+npm run preview
 ```
 
 ## Built with
